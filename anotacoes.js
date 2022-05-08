@@ -132,5 +132,13 @@
                                         <title>Início | ig.news</title>
                                 </Head>
 
-                                
+
+                        
+                        ESTILOS GLOBAIS DO APP
+
+        Dentro de style eu vou criar um arquivo global.scss e note que não coloquei o module pois 
+        eu vou utilizar esse arquivo para fazer estilos gobais na minha aplicação.
+
+        O meu global.scss eu importo dentro do meu app.tsx
+
 */
