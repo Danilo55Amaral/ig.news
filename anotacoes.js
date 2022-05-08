@@ -49,5 +49,27 @@
                 export default MyApp
 
 
+                        ESTILIZAÇÃO COM SASS
+
+        Existe um problema que é por ex você estilizar um h1 de um componente e acabar 
+        estilizando também h1 de varios outros componentes, e quando temos dezenas de 
+        milhares de linhas de codigo isso se torna um problema. 
+
+        Por isso existe uma estratégia no Css chamada SCOPED CSS o styled-components por ex 
+        utiliza essa estratégia, que é um css nunca afetar outro componente, isso torna o css 
+        escopado ou seja ele fica aplicado ao escopo de um unico componente.
+
+        Porém em alguns casos mais simples da para utilizar outro meio sem ser o styled-component
+        aqui vamos utilizar o css de forma mais nativa e vamos utilizar o SASS que é um  pré-processador 
+        que cria sua estrutura com cascatas de estilos.
+
+        Vou criar uma pasta chamada style e dentro dela vou criar um arquivo chamado home.module.css 
+        eu utilizo o module para indicar que aquele arquivo é um scoped, vou importar esse css dentro de 
+        index.css.
+
+        Vou instalar o sass com o comando abaixo:
+                npm add sass
+        Após isso eu ao invés de utilizar a extensão css nos arquivos eu vou utilizar o scss
+
 
 */
