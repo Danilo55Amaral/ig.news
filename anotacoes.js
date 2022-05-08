@@ -72,4 +72,65 @@
         Após isso eu ao invés de utilizar a extensão css nos arquivos eu vou utilizar o scss
 
 
+              
+         
+                IMPORTANTE
+
+                        _app.tsx e _document.tsx
+
+        Se eu quiser que algo se repita em todas as páginas eu colodo dentro do _app.tsx porém sempre 
+        que uma página for carregada o _app também será 
+
+        O _document funciona de forma semelhante ao app porém ele é carregado apenas uma única vez 
+        na aplicação.
+
+        Vou dentro de pages e cou criar o arquivo chamado _document.tsx vou exportar por padrão e 
+        vou escrever esse componente em formato de classe chamado MyDocument dentro vou ter um 
+        render e dentro um return, vou importar o Document de dentro do Next e vou utilizar um 
+        extends passando esse Document para meu componente, após isso eu coloco algumas coisas padrões do 
+        html dentro, porem vou substituir algumas tags por tags do document do next veja:
+
+                                import Document, { Html, Head, Main, NextScript} from "next/document";
+
+                                export default class MyDocument extends Document {
+                                render() {
+                                        return (
+                                        <Html lang="pt-br">
+                                                <Head>
+                                                <title>Document</title>
+                                                </Head>
+                                                <body>
+                                                <Main />
+                                                <NextScript />
+                                                </body>
+                                        </Html>
+                                        )
+                                }
+                                }
+
+        Pronto com isso por exemplo eu posso colocar um titulo que vai refletir em todas as páginas na aba superior 
+        como o nome da aplicação.
+
+
+                        CONFIGURANDO FONTE EXTERNA
+
+        Vou procurar a font do google fonts, copior o link e colo dentro do meu Head dentro de _document.tsx 
+        se der erro é por que tem que fechar as tags.
+
+                        
+                        TITLE DINAMICO POR PÁGINA
+
+        
+        Dessa forma que eu fiz com o titulo da página todas as páginas vão ficar com o mesmo titulo, para fazer de forma dinamica 
+        eu devo fazer o seguinte, vou tirar a tag title de dentro do meu _document.tsx.
+        e dentro da página onde eu quero meu title eu devo importar o Head de dentro do next e utiliza-lo como um componente 
+        passando o meu title veja:
+
+                                import Head from "next/head";
+
+                                <Head>
+                                        <title>Início | ig.news</title>
+                                </Head>
+
+                                
 */
