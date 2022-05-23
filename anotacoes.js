@@ -74,7 +74,7 @@
 
               
          
-                IMPORTANTE
+                IMPORTANTE 
 
                         _app.tsx e _document.tsx
 
@@ -141,4 +141,39 @@
 
         O meu global.scss eu importo dentro do meu app.tsx
 
+
+                                COMPONENTE HEADER 
+
+        Dentro de src eu criei a pasta components, dentro dessa pasta eu vou criar uma pasta para meu 
+        componente Header e dentro dela eu criei um arquivo index.tsx e styles.module.css.
+        PS- Dentro desse componente eu não preciso exportar por default isso é obrigatório dentro do next
+        apenas dentro das páginas.
+
+        PS- Eu vou utilizar a tag header no html por que eu preciso ter a bordinha que vai ocupar todo o espaço 
+        dentro do meu header, a div colocada no meio é a dív que vai ficar em volta do conteudo do header e essa 
+        precisa ficar alinhada ao centro com uma largura máxima. 
+
+        A pasta images com as imagens do projeto eu coloco dentro da pasta public junto ao favicon.
+
+        PS- Dentro do next não precisamos fazer eo import da imagem diretamente no arquivo tsx basta colocar a / em seguida do 
+        nome da pasta em que está a imagem e em seguida o arquivo.    <img src="/images/logo.svg" alt=""/>  
+
+        Dentro do meu styles eu criar duas classes uma chamada  headerContainer e headerContent em seguida eu vou aplicar essas classes 
+        ao meu componente , primeiro eu importo e em seguida eu chamo dentro do className.
+
+                        import styles from "./styles.module.scss";       className={styles.headerContainer}
+
+        Como o meu Header vai está disponivel em todas as páginas eu vou colocar ele dentro do meu _app.tsx
+
+        Dica css:  
+
+                                 & + a {
+                                        margin-left: 2rem;
+                                }
+
+        Toda tag a que não for a promeira eu vou da um margin-left de 2rem ou seja 
+        toda tag a que antes não tiver outra tag a.
+
+        PS - Dentro do meu _document eu criei um link e passei o meu favicon.
+                                <link rel="shortcut icon" href="/favicon.png" type="image/png" />
 */
