@@ -176,4 +176,72 @@
 
         PS - Dentro do meu _document eu criei um link e passei o meu favicon.
                                 <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+
+
+                        COMPONENTE SINGINBUTTON 
+        
+        Esse botão vai ser criado em um componente isolado e não dentro do meu componente header 
+        por que esse botao tera estados diferentes, e que não tem haver com o header, com isso 
+        eu separo meio que isso de dentro do meu header e tiro essas responsabilidades dele.
+
+        Como o estado dele muda toda vez que o usuario estiver logado, o componente será renderizado 
+        e com isso apenas ele será renderizado, por que eu o criei como um componente isolado. 
+        
+        Criei a pasta SingInButton para o meu componente e dentro dela criei meu index e meu styles.
+
+        Vou instalar o pacote de icones do React 
+                                npm add react-icons  
+
+        Após instalar basta eu importar e depois chamar o icone desejado onde eu quero;
+                                import { FaGithub } from "react-icons/fa"   
+
+                               
+                                colocando o botao a esquerda do meu header
+        Vou colocar agora o meu button para a esquerda e vou utilizar um truque bem legal para isso 
+        vou dentro do styles do meu Header após a tag nav eu vou chamar a tag button e vou dar um 
+        margin-left: auto e ele vai ir o maximo para a esquerda. 
+
+        Fiz dessa forma por que esse botao ele só precisa ir totalmente para a esquerda se ele estiver dentro 
+        do header, se caso eu queira utilizar esse botão dentro de outro local da minha aplicação provavelmente 
+        eu não vou querer colocar ele totalmente para a esquerda ou seja a estilização da margem desse botão 
+        se aplica ao contexto em que ele está sendo utilizado, nesse caso é o header e é o header que vai definir 
+        o posicionamento do button.
+
+        Ps- Se eu colocar o border-radius com o mesmo valor que meu height ele vai arredondar o maximos possivel.
+        PS utilizei o  svg:first-child para indicar que essa estilização só se aplique ao primeiro svg pois depois 
+        vou utilizar outro no meu button.
+
+        PS- eu utilizei o filter: brightness(0.8) no meu hover por que ele vai dá um efeito bem legal e também posso
+        colocar um transition: filter 0.2s.
+
+        PS - A cor do meu svg eu vou definr pelo meu html por que a cor irá mudar conforme o usuario logar no site
+
+        Para definir essa condição do meu usuario está ou não logado eu vou criar uma variavel e vou chamar de isUserLoggedIn
+        e vou passar por enquanto o valor true.
+
+        Eu vou escrever isso como uma condição dentro do meu return do meu componente passando as duas situações.
+
+                                return isUserLoggedIn ? (
+                                        <button 
+                                        type="button"
+                                        className={styles.signInButton}
+                                        >
+                                        <FaGithub color="#04d361" />
+                                        Danilo Amaral
+                                        </button>
+                                ) : (
+                                        <button 
+                                        type="button"
+                                        className={styles.signInButton}
+                                        >
+                                        <FaGithub color="#eba417" />
+                                        Sign in with Github
+                                        </button>
+                                );
+
+
+        Também importei um novo incone chamado FiX que é um icone com um X para fechar, dentro desse icone eu criei uma classeName 
+        para estilizar ele. 
+        Na parte que o usuario está logado eu adicionei meu nome.
+        consigo observar as duas situações modificando a minha variavel  isUserLoggedIn para true ou false.
 */
