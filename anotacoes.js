@@ -244,4 +244,30 @@
         para estilizar ele. 
         Na parte que o usuario está logado eu adicionei meu nome.
         consigo observar as duas situações modificando a minha variavel  isUserLoggedIn para true ou false.
+
+                                       Página Home 
+                                       
+        Vou utilizar a tag main para todo o  meu conteudo da home , depois a tag section para colocar todo o meu conteudo a esquerda 
+        depois da section eu vou colocar minha imagem com a tag img.
+
+        Dentro do Section eu coloquei uma tag span para colocar minha mensagem hey welcome, o emoji  basta colocar no google emoji clapping 
+        copiar e colar. 
+        Logo abaixo do span eu coloco um h1 e escrevo meu texto, ainda dentro do meu h1 eu coloquei um span em volta da palavra react fiz isso 
+        por que vou diferenciar na cor, em seguida eu escrevo meu paragrafo com a tag p coloquei uma tag br para forçar uma quebra de linha.
+
+        Como eu estou escevendo dentro da minha página home eu vou criar aqui dentro da pasta pages mesmo um arquivo chamado home.module.scss 
+        dentro da minha estilização eu definir que minha altura do contentContainer  é: 
+                                        height: calc(100vh - 5rem); 
+        isso significa que será a altura total da tela 100vh  mesno 5rem por que 5rem é a altura do meu header isso por que ele tem que ficar 
+        centralizado verticalmente na tela descontando a altura do meu header por que eu preciso que ele fique a mesma distancia do meu header 
+        e o fim da tela.
+
+        Utilizei o justify-content: space-betewenn para ficar a imagem totalmente a esquerda e meu conteudo totalmente a direita.
+
+        vou pegar apenas um nivel do span dentro do meu hero  ou  seja apenas vou estilizar o primeiro por isso eu utilizei o span um nivel
+        > span  
+
+        
+
+
 */
