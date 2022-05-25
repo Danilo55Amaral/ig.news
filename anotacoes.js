@@ -267,7 +267,15 @@
         vou pegar apenas um nivel do span dentro do meu hero  ou  seja apenas vou estilizar o primeiro por isso eu utilizei o span um nivel
         > span  
 
-        
+                                                COMPONENTE SUBSCRIBEBUTTON  
+
+        Eu criei o botao de insriçao , criei uma pasta chamada SubscribeButton e dentro dela eu criei um arquivo index e o arquivo styles
+        dentro do meu componente eu criei um button e passei uma classeName subscribeButton.
+
+        PS- é sempre o contexto de define o espaçamento do elemento , por exemplo se o elemento está em outro contexto de outro elemento 
+        é sempre nesse outro elemento que definimos o espacamento.
+
+        Ps- Por isso a margem a gente vai da dentro do home.module.css justamente devido a situação a cima mensionada.
 
 
 */
