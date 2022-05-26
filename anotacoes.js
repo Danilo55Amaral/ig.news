@@ -278,4 +278,105 @@
         Ps- Por isso a margem a gente vai da dentro do home.module.css justamente devido a situação a cima mensionada.
 
 
-*/
+                                                        Configurando o Stripe
+
+        Agora vamos configurar o stripe e integrar a aplicação, é uma plataforma de pagamentos que permite os usuarios fazerem pagamentos 
+        atraves de cartao, eles tem um ambiente de homologação muito rapido e simples, basta fazer um cadastro e criar um projeto.
+        O Stripe também tem um API muito simples de ser utilizada.
+
+         Eu criei o preço para o meu produto e vou em developer e vou pegar as chaves da API.
+
+         A Publishable Key é uma chave que pode ser publica ela é utilizada para interagir com a api do stripe através do front end para 
+         buscar informações que são publicas.
+
+         A secret Key é uma chave secreta e o acesso a essa chave permite a pessoa fazer tudo que quiser na conta stripe, desde a fazer assinaturas 
+         sem pagar até remover assinaturas. tem que ter muito cuidado nessa chave.
+
+         Eu vou copiar a secret key, vou criar na raiz do projeto um arquivo chamado .env.local e dentro dele eu vou criar uma variavel de ambiente 
+         chamada STRIPE_API_KEY e vou passar minha chave secreta para essa variavel.
+
+         O arquivo .env.local é um arquivo para variaveis de ambiente.
+
+         
+                                                        CONSUMIENDO API DO STRIPE(SSR)
+
+        Agora vamos fazer a chamada da api do stipe para obter as informações do produto criado, se eu fizer essa chamada como por ex faço no react 
+        co useEffect essa chamada vai acontecer dentro do Browser e isso gera um problema nesse tipo de app que é uma mudança no layout que fica perceptivel 
+        ao usuario.
+
+        Vamos aplicar SSR para fazer chamadas http que no caso essa chamada vai acontecer ao inves de acontecer no Browser irá acontecer dentro so servidor node 
+        do next.
+
+        Devemos fazer esse tipo de chamada dentro de uma pagina do next e não em um componente pois esse tipo de chamada só vai funcionar na página.
+
+        Dentro da minha página home eu vou exportar uma função chamada getServerSideProps e tem que ser exatamente esse nome, tem que ser uma função asincrona,
+        escrevi ela em forma de const por que de dentro do next dá para importar um tipo para ela: 
+
+                                        import { GetServerSideProps } from "next";  
+        
+                                        export const getServerSideProps: GetServerSideProps = async () => {
+
+                                        }
+        
+        PS- tudo que eu retorno de dentro do meu getServerSideProps eu  posso acessar dentro do meu componente via props
+        e todo codigo que eu colocar dentro dessa função ele não irá executar dentro do Browser e sim dentro do servidor 
+        do next.
+
+        Primeiro eu vou instalar o stripe ao projeto com o comando     npm add stripe
+
+        Eu criei dentro da pasta src uma pasta services e dentro eu criei um arquivo chamado stripe.ts e esse arquivo é quem defini 
+        a conexçao com a api do stripe.
+
+        Dentro do meu arquivo eu importo o stripe que é uma sdk e com isso eu não preciso fazer todas as requisições através de http 
+        poderia ser feito também porém dessa forma já dá para saber os metodos existentes, rotas. 
+
+        Vou criar e exportar stripe e passar new Stripe , no primeiro paramtro eu utilizo process.env e passo a minha variavel de ambiente 
+        do stripe, o segundo parametro são algumas infomações obrigatorias como a versão da api(apiVersion) em seguida eu vou colocar appInfo 
+        que são informações de metadados como nome da aplicação (Com isso lá dentro do stripe conseguimos identificar qual aplicação está fazendo as requisiçoes)
+        também colocamos a versão da aplicação, posso importar a versão de dentro do package.json e utilizar.
+
+                                        import Stripe from "stripe";
+                                        import { version } from "../../package.json";
+
+                                        export const stripe = new Stripe(
+                                                process.env.STRIPE_API_KEY,
+                                        {
+                                                apiVersion: '2020-08-27',
+                                                appInfo: {
+                                                name: 'Ignews',
+                                                version
+                                                }
+                                        }
+                                        )
+
+        Após isso eu vou utilizar essa api dentro do meu componente home, para fazer uma requisição, eu peguei o preco e utilizei o await 
+        e passo o stripe , para isso eu devo importar meu stripe de dentor da pasta services, vou selecionar prices e utilizar o retrieve 
+        para buscar apenas um e vou passar dentro da strin o id da api do preco que eu criei lá no site so Stripe.
+        Apos isso eu vou passar um segundo parametro chamado expand e dentro dele vou passar product, preciso disso por que quando eu vou buscar 
+        os dados de um preço, e com isso também vou ter acesso a todas as informações do produto.
+
+                                        const price = await stripe.prices.retrieve('price_1L3T6QDvkvWoc9GEtf7ozjXl', {
+                                                expand: ['product']
+                                        })
+
+        PS- Uma dica para se trabalhar com precos é utilizar centavos pois isso ajuda a trabalhar com numeros inteiros  
+        e evita decimais, note que eu dividir por 100.
+                                                        const product = {
+                                                                priceId: price.id,
+                                                                amount: price.unit_amount / 100),
+                                                        }
+
+
+        No meu return eu vou retornar via props products. com isso eu posso pegar e acessar no componente   
+                        export default function Home({ product })  
+
+        Criei também uma interface e definir as propriedades de meu product.   
+        
+        Agora dentro do meu html onde eu coloquei o preco 9.90 eu posso substituir por {product.amount}
+
+        Eu posso utilizar o Intl.NumberFormat para formatar o valor de amount.
+
+        Agora eu vou precisar do priceId dentro do meu componente SubscribeButton e la dentro eu vou definir uma interface
+        
+
+*/      
