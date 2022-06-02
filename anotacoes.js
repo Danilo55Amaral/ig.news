@@ -379,4 +379,132 @@
         Agora eu vou precisar do priceId dentro do meu componente SubscribeButton e la dentro eu vou definir uma interface
         
 
+
+                                                  Static Site Generation (SSG)
+                                                  
+        No next existe o SSG é um processo muito semelhante ao SSR porém a partir do momento que a pessoa acessou a aplicação e 
+        todo o fluxo foi realizado, fez as chamadas api, gerou html , o next além de retornar esse html ao Browser ele irá salvar 
+        esse html como um arquivo estatico ou seja ele cria um arquivo html statico que contém o resultado final gerado a partir 
+        daquela tela, com isso quando a página for ser acessada novamente o next já tem salvo aquele conteudo estatico, com isso 
+        ele retorna diretamente aquele html estatico diretamente para o Browser sem precisar fazer uma nova chamada api. 
+        
+        Para acessar esse recurso dentro do next basicamente a gente deve utilizar getStaticProps igual fiz nessa aplicaçao com o 
+        getServerSideProps , vou fazer essa substituição na aplicação, o resto continua tudo igual não precisamos mudar nada alem disso.
+
+        Agora eu posso utilizar o revalidate que é definir quando tempo em segundos eu quero que essa pagina passe para ser reconstruida.
+                                                         revalidate: 60 * 60 * 24, // 24 hours
+        60 simboliza um  minuto, 60 novamente para simbolizar uma hora, e 24 simboliza 1 dia.
+        
+        O SSG é mais performatico pois ele salva o conteudo html e não precisa ficar fazendo todas as chamadas do zero 
+        O SSR permite ser mais dinamico 
+
+        Um exemplo imaginte que dentro da aplicação seja necessário pegar a informação de um usuario que está logado para fazer uma chamada api 
+         que é diferente por usuario nesse caso eu não consigo fazer com getStaticProps isso por que a partir do momento que ele gera  um html estatico 
+         aquele mesmo html estatico será mostrado a todos os usuarios, com isso aprendemos que só podemos usar  o SSG em páginas que sejam estaticas 
+         por que o conteudo será o mesmo para todo mundo que irá acessar a aplicação. 
+
+         O SSR pode utilizar de informações dinamicas como por ex pegar dados do usuario logado. 
+
+         PS- Existem 3 formas de fazer chamadas api aqui dentro  
+         Client-side 
+         Server-side
+         Static site generation 
+
+         O static site generation será usado para casos que conseguimos gerar o html de uma página para que ele seja compartilhado com todas aquelas pessoas 
+         que estão acessando aquela aplicação,   exeplos  a home de um blog . o post de um blog, a página de um produto dentro de um ecomerce , essas páginas 
+         precisam ser acessadas pelo publico em geral e precisam da indexação do google(SO). 
+         
+         O Server Side Rendering a gente usa também quando precisamos da indexação do google porém a gente precisa de dados dinamicos da sessão do usuario ou seja 
+         informação em tempo real do usuario que está acessando, do contexto da requisição. 
+
+         O Client-side  será utilizado em para os outros casos quando não é necessária indexação, quando uma informação é carregada atraves de alguma ação do usuario, 
+         uma informação que não tenha a necessidade de não está ali.
+
+
+                                        API ROUTES NO NEXT.JS 
+                                        
+                                        
+        Existem operações que fazemos normalmente no back end da aplicação, aplicações com certo nível maior de segurança como autenticação, evio de emails, comunicação com 
+        banco de dados, comunicação com serviçoes externos.  
+        PS- A partir de um momento que  o código é executado pelo front end esse código nunca está seguro sempre vai ter a possibilidade dele ser visualizado por um usuario 
+        externo com conhecimento. Por isso tem códigos que devem ficar no back end.
+
+        Por isso sempre que for feita alguma operação no banco de dados por ex sempre é utilizado o back end.
+
+                                                        back end
+
+        O nexts tem recursos que permitem que em alguns momentos ou seja não substitui totalmente um back end, em alguns casos para algumas funcionalidades isoladas 
+        ou em pequenos casos dá para fazer o back end dentro do next.
+        Isso é possivel por causa do servidor node que o next possui. 
+
+        Dentro de pages eu criei uma pasta chamada api, todos os arquivos que forem criados dentro de api automaticamente serão transformados em rotas
+        do meu back end.
+
+        Vou criar uma rota só de teste  e para isso eu vou criar um arquivo chamado user.ts
+        dentro dele eu escrevo uma função  posso utilizar arow function, essa função sempre 
+        recebe dois parametros request e response, o request é todos os dados eu recebo da 
+        minha aplicação,  o response serve para trazer a resposta. 
+
+                                export default (request, response) => {}
+
+        Como estamos utilizando typeScript é importante tipar essa função e para isso devemos importar 
+        de dentro do next o NextApiRequest e o NextApiResponse,  e depois eu tipo minha função.
+
+                                import { NextApiRequest, NextApiResponse } from 'next';
+
+                                export default (request: NextApiRequest, response: NextApiResponse) => {}
+
+        E dentro dessa função que eu criei eu posso fazer qualquer operação que eu faria de dentro de um back end 
+        normal em node.
+        Para exemplificar eu criei uma listagem de usuarios simples e retornei uma resposta no formato json. 
+
+        Eu consigo testar essa api colocando o nome da rota criada la no local host. PS- instalando a extensão JsonView 
+        da para ver melhor formatado o json.
+
+        Aqui foi feita uma rota puramente back end ou seja tudo isso foi feio na camada do next que roda entre o Browser 
+        e o back end final da aplicação ou seja tudo que é executado nessa rota não fica acessivel no lado do cliente, o 
+        Browser só vai ter acesso aos dados. Essa é uma das funcionalidades do next que trouxe o next para um outro patamar.
+
+                                                        Serveless
+        Todas essas apis roots que nos vimos todas elas são executadas utilizando o conceito de Serveless ou  seja 
+        quando a aplicalçao passa pelo deploy(enviadas para produção) as rotas de dentro da pasta de api elas 
+        não formam um servidor , toda vez que essa rota for chamada ele sobe um ambiente isolado e ele executa as  funções 
+        e a partir do momento que ela executa a resposta o ambiente de execução serveless ele morre, ele não fica executando 
+        um servidor 24h , ele só executa conforme vai acontecendo as chamadas.
+
+
+                                                        ESTRATÉGIAS DE AUTENTICAÇÃO 
+
+        Os metodos de autenticação dentro do nexts, umas das tecnicas bem comuns é utilizar um JWT dentro do Storage 
+        da aplicação, geralmente esse JWT tem uma data de expiração,. 
+
+        Outra estratégia bem comum é o Next Auth essa estratégia é utilizada quando queremos um sistema de autenticação 
+        simples, principalmente um login social na aplicação ou seja um login com terceiro tipo google, git-hub,facebook 
+        ou quelquer outro, a gente utiliza também essa estratégia quando não se quer ficar armazenando credenciais de acesso
+        dentro do back end, essa estratégia é feita utilizando as proprias rotas api do next e por isso não precisa ser feita 
+        no back end. É uma estratégia segura porém não utilizamos em todos os casos.
+        
+        PS- da uma lida na documentação do next que tem mais informações legais.
+
+        Existem também as estratégias utilizando serviços externos como o Cognito da aws, entre outros como o Auth0, Firebase 
+        e todos eles conseguimos integrar ao Next Auth.
+
+        JWT (Storage)
+        Next Auth (Social)
+        Serviços externos: Cognito , Auth0, Firebase ...
+
+        Nessa aplicação vai ser utilizado o Next Auth 
+
+        
+
+
+
+        
+
+
+
+
+
+        
+
 */      
