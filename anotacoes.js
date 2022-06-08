@@ -495,7 +495,102 @@
 
         Nessa aplicação vai ser utilizado o Next Auth 
 
+                                                        PORAMETRIZAÇÃO NAS ROTAS / ROTAS DINÂMICAS
+
+        Vamos implementar autenticação utilizando o Next Auth na aplicação, existe um cenceito bem interessante dentro dos 
+        conceitos de rotas da aplicação Next, que as vezes é a criação de rotas dinamicas.
+        Esse tipo de rota dinamica é quando queremos passar parametros nas rotas como por ex trazer um usuario 1 de users
+        Para fazer isso por ex eu crio uma pasta chamada users, o arquivo users eu troco para index e jogo dentro da pasta 
+        users e agora para eu criar uma outra rota buscando o usuario pelo id , eu crio um arquivo com [] e dentro dos colchetes 
+        eu coloco o nome que eu qusier, e .tsx., também se eu utilizar o ... dentro do  meu colchetes por ex [...users].tsx 
+        tudo que eu colocar na rota url depois de user  irá ser repassado para uma variavel chamada users. 
+
+        Isso geralmente é utilizado para fazer integração com algo de terceiros, ex quando for feita a integração com autenticação
+        o Nexts Auth utiliza esse mecanismo para fazer com que todas as chamadas para uma rota especifica da aplicação sempre 
+        caiam dentro do contexto do Nexts Auth , com isso não é necessário criar váris arquivos. 
+
+                                                        AUTENTICAÇÃO COM NEXT AUTH 
+
+        Existe a documentação do NextAuth e da para fazer tranquilo seguindo ela.  https://next-auth.js.org/getting-started/example
+        Dentro da parte de exemple code na documentação eu vejo que eu preciso criar o seguinte arquivo [...nextauth].ts 
+        dentro de pages/api/auth, eu crio a pasta auth dentro desse caminho. 
+
+        Após isso eu vou utilizar o mesmo código eu é mostrado na documentação posso copiar e colar.
+
+        Eu preciso também instalar o Next Auth com o comando   npm add next-auth  
+
+        Como eu utilizo typeScript eu também devo importar as bibliotecas de tipagem com o comando 
+                                npm add @types/next-auth -D   
+
+        Esse exemplo que ele traz já é utilizando o git-hub e para fazer essa integraçao com o git-hub 
+        é necessáro duas informações do git-hub o clientId e o clientSecret e para isso é necessário criar 
+        uma aplicaçao dentro do git-hub para parte de autenticação. 
+
+        Agora é preciso ir ao git-hub vou dentro das minhas configurações(Settings), vou em develope settings 
+        e vou em OAuth Apps, vou em Registrar a nova aplicação, preencher as informações , e na parte de 
+        Authorization callback URL devemos utilizar http://localhost:3000/api/auth/callback é importante utilizar 
+        esse callback por que é o tipo de rota que criamos.
+
+        é importante criar uma aplição por ambiente ou seja se vamos executar para dev é uma se for em produção é outra 
+        aplicação que criamos no git-hub. 
+        Dentro da nossa aplicação no git-hub vamos precisar pegar o client ID , copiar e colcar dentro do arquivo .env.local 
+        eu crie a variavel de ambiente GITHUB_CLIENT_ID e passei  o meu client ID.
+
+        Após isso eu volto na minha app no git-hub e gero minhas client secrets é importante copiar e colcar dentro de env local 
+        assim que for gerada pois ela desaparece em seguida. criei uma variavel chamada GITHUB_CLIENT_SECRET 
+
+        Feito isso temos as credenciais do git-hub client e secrets vamos passar essas variavels de ambiente dentro de [...nextauth].ts
+        Após isso definimos o nosso escope que quer dizer quais informações do usuario eu quero ter acesso, dentro da documentação eu 
+        consigo ver vários tipos de permissoes que podem ser configuradas de acesso ao git-hub do usuario, vou utilizar o read:user 
+        por que só vai dar permissões basicas de usuario, vou passar dentro de scope. 
+
+        PS- essa parte do escope mudou com a atualização e por isso ela já vem como padrão não precisa ser implementada, sua implementação 
+        tbm mudou. 
+
+        Agora eu vou dentro do meu componente SingInButton que é o componente que vai realizar a autenticação, devemos fazer a importaçao do 
+        signIn  que é uma função que faz a autenticação do usuario.
+                                                        import { signIn } from "next-auth/react";
+
+        Depois dentro do meu bitton eu chamei um evento onClick que vai disparar essa função, o signIn vai receber como paramtro o tipo de 
+        autenticação que queremos estamos utilizando.
+
+        Agora eu posso mudar uma informação que eu tinha deixado de forma estatica para fins de visualização nesse trexo 
+                                                        const isUserLoggedIn = true;
+
+        Para isso eu vou importar um hook chamado useSession ele irá retornar informações se o usuario tem uma sessão ativa ou não;
+                                                        import { signIn, useSession } from "next-auth/react"
+        em seguida eu substituo o meu trexo que estava estático por:   const {data: session} = useSession()
+        também vou substituir o isUserLoggedIn por session.
+
+        Outra coisa que é necessária fazer é que todos ou parte dos componentes da aplicação precisa saber se o usuario está ou não 
+        logado isso significa que todos os componentes precisam ter acesso a mesma informação, na maioria das vezes utilizaremos context api
+        e o next-auth utilizar dos context para servir as informações. Por isso o  meu provider precisa está lá no meu componente raiz que é 
+        o _app.tsx que é o componente que fica em volta de todas as páginas, com isso todas as páginas vão conseguir ter acesso a essa informação 
+        se o usuario está logado ou não.
+
+        Vou dentro do meu _app.tsx e vou importar o Provider como eu posso futuramente utilizar outros providers em minha aplicação eu vou renomear 
+        o meu provider utilizando o as: 
+                                     import { SessionProvider as NextAuthProvider } from "next-auth/react"; 
+        Após isso eu posso substituir o meu fragment por  NextAuthProvider e dentro dela eu preciso passar uma propriedade 
+        chamada session={pageProps.session}  
         
+        Dentro de SingInButton eu posso dar um console.log em session para visualizar o valor dessa variavel sempre que ela mudar;
+
+        Posso testar e já vai logar com o git-hub.
+
+        Posso substituir o nome do meu botão que estava estático por  {session.user.name} com isso o nome sempre ficará o do usuario logado.
+
+        Posso implementar no meu primeiro button um evento onclick para deslogar o usuario passando a função singOut lembre que devo  importar 
+        o singOut para isso.
+
+
+
+
+
+
+
+        
+         
 
 
 
