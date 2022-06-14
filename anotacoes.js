@@ -498,16 +498,18 @@
                                                         PORAMETRIZAÇÃO NAS ROTAS / ROTAS DINÂMICAS
 
         Vamos implementar autenticação utilizando o Next Auth na aplicação, existe um cenceito bem interessante dentro dos 
-        conceitos de rotas da aplicação Next, que as vezes é a criação de rotas dinamicas.
+        conceitos de rotas da aplicação Next, que as vezes é a criação de rotas dinâmicas.
         Esse tipo de rota dinamica é quando queremos passar parametros nas rotas como por ex trazer um usuario 1 de users
         Para fazer isso por ex eu crio uma pasta chamada users, o arquivo users eu troco para index e jogo dentro da pasta 
         users e agora para eu criar uma outra rota buscando o usuario pelo id , eu crio um arquivo com [] e dentro dos colchetes 
         eu coloco o nome que eu qusier, e .tsx., também se eu utilizar o ... dentro do  meu colchetes por ex [...users].tsx 
         tudo que eu colocar na rota url depois de user  irá ser repassado para uma variavel chamada users. 
 
+        Ps- ... spred operation
+
         Isso geralmente é utilizado para fazer integração com algo de terceiros, ex quando for feita a integração com autenticação
         o Nexts Auth utiliza esse mecanismo para fazer com que todas as chamadas para uma rota especifica da aplicação sempre 
-        caiam dentro do contexto do Nexts Auth , com isso não é necessário criar váris arquivos. 
+        caiam dentro do contexto do Nexts Auth , com isso não é necessário criar vários arquivos. 
 
                                                         AUTENTICAÇÃO COM NEXT AUTH 
 
@@ -515,7 +517,7 @@
         Dentro da parte de exemple code na documentação eu vejo que eu preciso criar o seguinte arquivo [...nextauth].ts 
         dentro de pages/api/auth, eu crio a pasta auth dentro desse caminho. 
 
-        Após isso eu vou utilizar o mesmo código eu é mostrado na documentação posso copiar e colar.
+        Após isso eu vou utilizar o mesmo código que é mostrado na documentação posso copiar e colar.
 
         Eu preciso também instalar o Next Auth com o comando   npm add next-auth  
 
@@ -551,7 +553,7 @@
         signIn  que é uma função que faz a autenticação do usuario.
                                                         import { signIn } from "next-auth/react";
 
-        Depois dentro do meu bitton eu chamei um evento onClick que vai disparar essa função, o signIn vai receber como paramtro o tipo de 
+        Depois dentro do meu button eu chamei um evento onClick que vai disparar essa função, o signIn vai receber como paramtro o tipo de 
         autenticação que queremos estamos utilizando.
 
         Agora eu posso mudar uma informação que eu tinha deixado de forma estatica para fins de visualização nesse trexo 
@@ -582,6 +584,82 @@
 
         Posso implementar no meu primeiro button um evento onclick para deslogar o usuario passando a função singOut lembre que devo  importar 
         o singOut para isso.
+
+
+
+                                                        FaunaDB 
+
+                                        Escolhendo um banco de dados 
+
+        Vamos configurar a aplicação para se comunicar com um banco de dados, primeiramente essa aplicação é um tipo 
+        de aplicação que não depende de um back end, isso por que estamos utilizando o conceito de apis routes do next
+        isso é uma boa estratégia para aplicações menores.
+
+        Nessa aplicação que está sendo construinda assim que o usuario logar na aplicação é preciso salvar algumas informaçoes 
+        desse usuario dentro de um banco de dados, isso é necessário por que quando o usuario se inscrever no stripe 
+        é necessário saber qual usuario se inscreveu no stripe, algum tipo de id desse usuario. 
+
+        Nessa aplicação utilizamos o faunaDB que é um banco de dados feito principalmente para aplicações seveless 
+        Todas as operações feitas dentro do FaunadB são feitas via HTTP , geralmente quando estamos utilizando um 
+        back end escrito em seveless, como por ex as funções da api routes do next é interessante utilizar banco de dados 
+        que não necessitem manter conexoes abertas para conseguir fazer as operacoes. 
+
+        Geralmente utilizamos FaunaDB - HTTP ou DynamoDB - AWS 
+
+        O Fauna foi recomendado pela Vercel, é um banco de dados promissor, tem um bom plano gratuito, tem uma api muito 
+        boa e simples de ser utilizada. 
+
+                                                       
+                
+                                                CONFIGURANDO FAUNADB 
+
+        vamos acessar o site do FaunaDB pelo link https://fauna.com e vamos configurar o FaunaDB para isso é necessário 
+        criar uma conta é totalmente gratuito para criar a conta e tem os planos que tbm tem o plano gratuito. 
+
+        Depois de criar a conta vamos em criar novo banco de dados, vou chamar de ignews e vou em criar, ele vai cair no painel 
+        Vamos utilizar a chave de api do nosso projeto Fauna para poder se comunicar com o banco de dados do fauna,. 
+
+        Vou sem segurança e em criar noca chave,em função ou role eu vou utilizar admin mas tbm é possivel configurar as permissões 
+        do usuario, depois vou dá um nome para a minha chave vou chamar de ignews-next-app eu salvo e ele já gera a chave.
+
+        eu copio a chave e dentro da minha aplicação em .env.local eu crio uma variavel de ambiente com a minha chave.
+
+        ps- Lembrando que essa é uma instancia de produção, podemos tbm criar uma de desenvolvimento se quisermos utilizando 
+        uma iso no Docker. aqui vamos utiizar em produção mesmo.
+
+        Depois eu vou  criar uma colletion de usuario, vou chamar de users eu deixo as outras opções padrão e crio.
+
+        PS - O Fauna é um banco não relacional e com schema free isso significa que eu não possuo colunas no meu banco de 
+        dados o que eu tenho são documentos e cada documento salvo dentro das minhas collection do meu banco de dados elas
+        podem ter os dados que eu quiser lá dentro.
+
+        Para que eu possa buscar um usuario por email por ex quando for necessário buscar um usuario ou um registro por algum 
+        campo especifico ou ordenar os dados por algum campo especifico, é necessário criar um indice, isso torna a busca 
+        no meu banco de dados mais performatica. 
+
+        Vou em indices e vou criar um indice chamado user_by_email em termos eu vou colocar data.email(sempre coloco data e 
+                o nome do campo que eu vou salvar) e vou selecionar a opção Unique. o resto deixo padrão; 
+
+        Agora o proximo passo é instalar o sdk para trabalhar com o FaunaDb dentro do projeto para isso eu vou rodar 
+                        npm add faunadb   
+
+        Dentro de services eu vou criar um arquivo chamado fauna.ts e em seguida eu importo o Client dentro do faunadb
+        e vou exportar fauna passando new Client , vou passar como parametro secret com a minha variavel de ambiente que 
+        eu criei para o fauna. isso vai me dá acesso ao banco de dados.
+
+                                                IMPORTANTE      
+        PS- As operações que forem feitas no banco de dados ou no stripe ou em qualquer coisa que precisam ter acesso as chaves 
+        das variaveis de ambientes elas não podem ser feitas pelo lado do Browser, essas operações só podem ser feitas dentro das 
+        minhas rotas api que ficam dentro de api em pages(são rotas back end não são acessiveis pelo Browser), ou  por dentro dos 
+        metodos getStaticProps ou getServerSideProps. 
+
+
+
+
+
+
+
+        
 
 
 
