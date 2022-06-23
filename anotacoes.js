@@ -710,5 +710,27 @@
         try se der certo ele vai retornar um true se não der certo eu vou colocar um catch retornando false.
         isso evita que o usuario faça o login sem que a aplicação faça a interação com o banco de dados.
 
-                                
+
+                                        VERIFICANDO USUARIO DUPLICADO 
+        
+      Fazer com que não crie novamente um usuario se ele tiver tentando fazer o login já logado, o  que acontece 
+      é que quando o usuario faz login ele cria um registro dentro da tabela users, e guarda as informações la dentro
+      é necessário não criar esse registro caso o usuario já esteja cadastrado. 
+
+      É importante conseguir reduzir o numero de operações que forem ser feitas e colocar tudo em uma unica operação
+       e dentro do Fauna dá para ter muito controle da query que vai ser utilizada, 
+                
+        Vou utilizar os metodos do Fauna If(se) Not(Não) Exists(Existe) um usuario que ele realize um Match(where no sql)
+        e para fazer a busca eu vou utilizar o conceito de indeces, e eu criei dentro do Fauna um user_by_email 
+        Vou passar isso dentro do Index, e vou passar o email do usuario e para o usuario poder usar letras maiusculas 
+        e minusculas eu vou utilizar um Casefold. 
+        Com isso ele vai persquisar se não existir um usuario qual dá um match na condição especificada eu crio 
+        aquele usuario. 
+
+        Dentro do Fauna todo if que for feito tem que ter um else, e aqui eu vou  colocar no else para ele fazer uma busca dos dados caso 
+        o usuario já exista e para isso eu utilizo o Get(semelhante ao select no sql) selesionando o usuario que bate 
+        com o meu indice.
+                             
+        PS- É importante saber que dentro do Fauna não podemos buscar informações no banco de dados sem um indice
+        
 */      
