@@ -654,30 +654,61 @@
         metodos getStaticProps ou getServerSideProps. 
 
 
+                                                CONFIGURANDO O Git-hub  
 
+        Fazendo login pelo git-hub a api do stripe utiliza o email publico colocado no perfil do github 
+        é importante verificar se tem esse email publico cadastrado lá nas opcões de perfil no github.
 
+                                                SALVANDO USUARIO NO BANCO 
 
+        Vamos salvar o usuario assim que o mesmo for logado, na documentação do NextAuth na opção de configuração 
+        tem a parte de callbacks, essas calbacks são funções que são executadas de forma automatica pelo NextAuth 
+        sempre que o usuario faz alguma ação, por ex quando o usuario for logar ele pode executar uma async. 
 
+        Eu posso usar essas calbacks aqui eu vou pegar essa que é executada quando o usuario for logar dentro do meu 
+        arquivo [...nextauth], eu chamo dentro de NextAuth logo após o provides o callbaks e passo essa função asyn 
+        para dentro.  
+                        callbacks: {
+                                async signIn({ user, account, profile, email, credentials }) {
+                                        return true
+                        },
+                }
 
-        
+        Ps- esse arquivo é executado dentro do servidor node do next e não dentro do Browser por isso se for 
+        necessário dá um console para algum teste ele ficará fisivel dentro do terminal e não no console do browser.
 
+        PS - essa callback me retorna esses dados que utilizamos nos parametros, o que vamos fazer agora é pegar esses 
+        dados de user e salvar no banco de dados. 
 
+        Para salvar esses dados dentro do banco de dados eu vou utilizar o client do fauna que eu criei, o primeiro passo 
+        é importar o fauna para dentro desse arquivo. 
+                import { fauna } from "../../../services/fauna";
 
+        Agora é necessário escrever uma query do fauna, eu preciso importar também de dentro do fauna o query 
+        eu vou renomar ele para q    import { query as q } from 'faunadb'; apenas renomei para simplificar pois 
+        vou chamar bastante o query.
 
+        Agora vou fazer uma inserção no banco de dados, vou utilizar um await passando fauna.query e dentro eu 
+        vou  chamar q e passar um Create que é um metodo para fazer uma inserção, como primeiro parametro do Create 
+        eu passo qual o nome da colletion ou tabela que vou inserir q.Colletion('users), e como segundo parametro eu 
+        vou utilizar um data que são os dados que eu vou inserir {data: { email } } nesse caso eu vou inserir apenas o 
+        email do usuario. 
 
+        Ps- ele deu um problema por que o email ta como paratro da função, eu retirei para resolver.
 
+        A sintaxe do FaunaDB é o FQL que é o Fauna Query Language , na documentação do fauna na parte de 
+        API references em FQL, Databases. vai ter todos os metodos que podem ser usados.
 
-        
-         
+        Para testar eu faço o login novamente e acesso o Fauna verifico se os dados foram inseridos dentro 
+        da tabela.
 
+        Eu preciso fazer uma verificação para ver se o usuario ainda não existe para poder criar ele 
+        se não ou eu não faço nada ou atualizo os dados do usuario.
 
+        Mas antes perceba que essa async me retorna um true e isso significa que o login deu certo porém se 
+        der algum erro na inserção no banco de dados o login não pode dar certo,  por isso eu vou utilizar um 
+        try se der certo ele vai retornar um true se não der certo eu vou colocar um catch retornando false.
+        isso evita que o usuario faça o login sem que a aplicação faça a interação com o banco de dados.
 
-        
-
-
-
-
-
-        
-
+                                
 */      
