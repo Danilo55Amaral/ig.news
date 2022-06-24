@@ -733,4 +733,87 @@
                              
         PS- É importante saber que dentro do Fauna não podemos buscar informações no banco de dados sem um indice
         
+
+                                        PAGAMENTOS NO STRIPE (Gerando sessão no checkout)    
+
+        Vamos gerar uma chekout session nada mais é que uma url na qual o usuario preenche as informações de 
+        pagamento e após isso ele é redirecionado de volta para a aplicaçao. 
+        Essa funcionalidade vai ficar no botão de se inscrever Subscribe now. 
+
+        Dentro do componente SubscribeButon vamos fazer essa implementação, eu criei dentro desse componente 
+        uma função handleSubscribe e vou chamar essa função dentro da minha tag button em um evento onClick.
+
+        Um passo muito importante é saber se o usuario está logado na aplicação pois se ele não estiver logado 
+        na aplicação não pode ser permitido que ele realize uma inscrição, para isso eu devo importar o useSession 
+        de dentro do client do next-auth e vou utiliza-lo, permite saber se o usuario está logado na sessão.
+
+        Eu vou atribuir o useSession para minha session e vou criar um teste dentro da minha função para que 
+        se não exixtir uma session eu vou redirecionar ele para a autenticação. Para isso eu devo importar o 
+        metodo sidnIn também. O meu if vai redirecionar para signIn com github e vou  colocar um return após para 
+        que o  código a partir disso não continue sendo executado.
+
+        Agora se o usuario estiver logado  na sesssão o proximo passo agora é criar o Chekout session e eu posso 
+        ver na ducumentação em stripe checkout session como faz isso, nota-se que para fazer esse chekout session 
+        é necessário realizar um post na rota v1/checkout/sessions 
+
+        Dentro do stripe.ts estamos utilizando uma variavel de ambiente chamada STRIPE_API_KEY essa variavel é uma 
+        variavel de ambiente secreta e ela NÃO PODE FICAR PUBLICA NO FRONT END por padrão o next já não deixa 
+        essa variavel publica porém se for necessário deixa ela disponivel no front end utilizamos NEXT_PUBLIC 
+        apenas dessa forma ela ficará disponivel para ser utilizada no front end.
+
+        A nossa função handleSubscribe ela fica do lado do Browser, e a chave STRIPE_API_KEY é uma chave privada
+        qualquer pessoa com acesso a essa chave pode fazer qualquer coisa na conta do stripe, como já vimos dentro 
+        do next existem 3 locais que da para fazer uma operação desse tipo de forma segura, que poderá usar as 
+        variaveis de ambiente secretas, podemos fazer isso dentro do getServerSideProps(SSR), getStaticProps(SSG) e
+        nas API routes.  Esses são os 3 locais em que podemos utilizar as nossas variaveis credenciais secretas. 
+
+        Nesse caso aqui dessa nossa necessidade o melhor local é dentro da API Routes por que as outras opções 
+        só são utilizadas quando a página está sendo renderizada, se for um ação de um click em um botão por ex 
+        depois que a página está renderizada nesses casos se utiliza API routes.
+
+        Para isso eu vou dentro de pages/api e vou criar um arquivo chamado subscribe.ts , dentro dessa rota 
+        vamos retornar uma função async que vou passar na req: NextApiRequest  e res: NextApiResponse esses 
+        parametros devem ser importados de dentro do next, como nesse caso eu só quero aceitar requisições 
+        do tipo post eu falo um teste para verificar isso, se minha requisição não for do tipo post eu vou 
+        dar uma resposta passando setHeader('Allow', 'POST') com isso eu estou informando ao meu front end
+        que o metodo que essa rota aceita é Post , também vou devolver uma resposta informando status(405)
+        passando um end com uma string Method not allowed.
+
+        Se a requisição for do tipo post eu vou criar uma sessão do stripe. eu criei uma stripecheckoutSession 
+        que recebe um await passando stripe.chekout.sessions.create e dentro eu passo as informaçoes que 
+        quero passar nesse chekout.
+        Passamos os metodos para nosso cheout: 
+        payment_method_types essa informação eu passo os metodos de pagamento que eu quero utilizar se eu 
+        quiser todos eu apenas não coloco, aqui eu definir card para cartao. 
+        O metodo billing_address_collection eu defino se o usuario é obrigado ou não a colocar o endereço
+        required ou auto. 
+        line_items eu defino quais são os items a pessoa vai ter dentro do carrinho esse item é um vetor de 
+        objeto, eu vou definir o price que é o id do preço e a quantity que é a quantidade.
+        mode é o tipo de pagamento eu eu definir aqui subscription que é pagamento recorrente.
+        allow_promotion_codes eu vou deixar true isso permite a criação de cupons de desconto. 
+        success_url que é para onde o usuario será redirecionado caso seja bem sucedida a operação.
+        cancel_url que é para onde o usuario será redirecionado quando ele cancelar a requisição.
+
+        os links que eu passo para as urls eu posso criar variaveis de ambiente para eles isso é mais recomendado
+        com isso também eu posso trocar de link mais facilmente depois que meu projeto tiver online.
+
+        Existe mais uma informação que é extremamente importante que é o customer que é quem está comprando o 
+        pacote , esse customer não pode ser só id.
+        Quando o usuario clicar na itenção de compra eu preciso criar antes um customer dentro do painel do 
+        stripe, eu preciso saber qual o usuario logado na aplicação. 
+        Não adianta usar o session pois estamos dentro de uma rota back end e por isso utilizamos o getSession 
+        a partir dai eu consigo utilizar session e acessar esses dados da seção. 
+
+        Também preciso criar um customer que vou chamar de stripeCustomer e vou passar algumas informações para ele.
+        o email que é uma iformação obrigatoria, também opreciso passar o metadata
+
+        e dentro do meu customer eu vou  passar o meu stripeCustomer.id 
+
+        Após tudo isso eu retorno de dentro da rota um status 200 informando que deu tudo certo com um json 
+        passando sessionId: stripecheckoutSession.id 
+
+        Vou no meu front end dentro do componente SubscribeButton e vou fazer uma requisição para essa rota 
+        que foi criada.
+
+
 */      
