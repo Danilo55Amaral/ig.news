@@ -816,4 +816,50 @@
         que foi criada.
 
 
+                                Redirecionando para o Stripe 
+
+        Quando o usuario clicar no botão subscribe vai ser chamado a api routs que foi criada dentro das rotas back end do next
+        para isso é necessário comunicar o front end com essas api routs, por ser uma rota tipo post precisa ser acessada 
+        via fetch ou axios, vamos utilizar o axios. 
+                devo instalar com o comando       npm add axios 
+                
+        dentro da pasta services eu crio um arquivo chamado api.ts dentro desse arquivo eu devo importar o axios 
+        vou criar uma constante chamada  api que recebe axios.create e dentro vou passar a baseUrl como /api eu 
+        poderia passar a url completa com localhost:300/api  mas como o endereço se repete eu posso omitir e utilizar 
+        apenas /api.
+
+        Apos isso dentro do meu componente subscribeButton eu faço a chamada para acessar a rota , eu fiz um try para 
+        fazer uma tratativa de erros, esse try eu vou  colocar dentro da função handleSubscribe vou utilizar o await dentro 
+        do tray mas para isso eu preciso transformar a função em uma async, no meu await eu vou chamar api e ele já importa 
+        automaticamente, passando o post e dentro do post eu vou passar a minha rota que next é o nome do arquivo.
+
+        Depois eu vou ter uma const que recebe response.data e pega o sessionId, após isso é necessário redirecionar o usuario
+        eu vou criar um novo arquivo dentro de services chamado stripe-js.ts que é a integração do stripe com o Browser 
+        a parte front end. Pra isso eu devo instalar um outra biblioteca rodando : 
+                npm add @stripe/stripe-js
+        
+        Eu importei o loadStripe dentro desse novo arquivo eu criei , e vou exportar uma async chamada 
+        gerStripeJs dentro dessa função eu criei uma variavel chamada stripeJs que recebe um await loadStripe 
+        e dentro eu passo a chave do stripe porém dessa vez é a chave publica, eu vou acessar a minha conta no stripe e 
+        vou pegar a Publishable keys , vou dentro de env.local e vou criar uma nova variavel de ambiente para essa chave 
+        eu passo essa variavel de ambiente dentro do loadStripe dentro do meu arquivo stripe-js.ts , toda variavel 
+        ambiente que precisa ser carregada diretmanete do Browser precisa ser publica e dentro do next fazemos isso 
+        colocamos NEXT_PUBLIC  no inicio , essa é a unica forma de ter uma variavel de ambiente acessada no front end da 
+        aplicação.
+        apos isso eu dou um return stripeJs.
+
+        Eu vou voltar ao meu componente subscribeButton  e vou criar uma const stripe que recebe um await com a função 
+        getStripeJs, após isso eu vou utilizar uma função da biblioteca do stripe chamada redirectToCheckout() passando 
+        como parametro sessionId. 
+
+        Eu vou utilizar um catch para fazer uma tratativa de erro e caso isso de erro eu vou exibir um alerta com a mensagem de 
+        erro. 
+
+        PS- como eu setei novamente variaveis de ambiente eu devo executar novamente um npm run dev 
+
+        PS- A realizar o teste clicando no botão de se inscrever não deu certo , para resolver o problema eu fui em 
+        https://dashboard.stripe.com/settings/account
+        Vai nessa pagina, coloca algum nome e clica em salvar e pronto
+        Acabei de resolver esse problema assim.
+ 
 */      
