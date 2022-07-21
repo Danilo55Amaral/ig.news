@@ -861,5 +861,93 @@
         https://dashboard.stripe.com/settings/account
         Vai nessa pagina, coloca algum nome e clica em salvar e pronto
         Acabei de resolver esse problema assim.
+
+                                EVITANDO DUPLICAÇÕES NO STRIPE 
+
+        Para evitar a duplicação de usuarios podemos utilizar o bando de dados Fauna DB, eu vou salvar esse 
+        usuario no Fauna quando ele for criado.
+
+        dentro do meu arquivo subscribe.ts dentro de api:
+
+        Eu importo o Fauna e vou utilizar o await setando o Fauna para realizar uma Query, para utilizar o q 
+        eu possom importa-lo também dentro de dentro do faunadb, eu vou utilizar um q.Update para atualizar 
+        uma informação de um usuario. 
+
+        Foi criada outra query armazenada em uma const user, eu dei um q.Get por que é para buscar um usuario 
+        fazendo um select, Match e Index para procurar um usuário eu coloquei procurar por email, e no Casefold 
+        eu passei session.user.email. Com isso eu vou ter os dados so usuario dentro de user. 
+
+        PS- é importante seguir a propria documentação do FaunaDb
+
+        na await eu vou atualizar, vou passar um Ref na Collection users, devo passar também o id da ref user.ref.id
+        deposi eu passo como objeto os dados que eu quero atualizar, eu passso no data: a informação que eu vou salvar 
+        lá dentro do Fauna.
+
+                                await fauna.query(
+                                q.Update(
+                                        q.Ref(q.Collection('users'), user.ref.id),
+                                        {
+                                        data: {
+                                                stripe_customer_id: stripeCustomer.id,
+                                        }
+                                        }
+                                )
+                                )
+
+        O TypeScript vai dá um erro informando que o ref não existe dentro do object , para isso basta eu criar um 
+        type para User e vou informar que dentro dele tem ref  e dentro da ref tem um id do tipo string.
+                                                type User = {
+                                                        ref: {
+                                                             id: string;
+                                                        }
+                                                }    
+                                                
+        Após isos no fauna.query eu posso passar User como generic :
+                                const user = await fauna.query<User>(
+                                q.Get(
+                                        q.Match(
+                                        q.Index('user_by_email'),
+                                        q.Casefold(session.user.email)
+                                        )
+                                )
+                                )
+
+
+        Com isso ele vai está salvando o stripe_customer_id do usuario que se inscreveu dentro do banco de dados 
+        mas ainda é necessário verificar se o usuário já tem essa informação salva para poder não criar novamente 
+        esse mesmo usuario que já está inscrito.
+        Para isso eu vou criar uma variavel let customerId que recebe user.data e setei a variavel que recebi
+        Ele vai dá um erro de typeScript e para resolver eu posso tipar  stripe_customer_id em seguida eu 
+        vou fazer o teste com if e vou passar todo meu código que foi criado. 
+
+                                let customerId = user.data.stripe_customer_id 
+
+                                if (!customerId) {
+                                const stripeCustomer = await stripe.customers.create({
+                                        email: session.user.email,
+                                        // metadata
+                                })
+
+                                await fauna.query(
+                                        q.Update(
+                                        q.Ref(q.Collection('users'), user.ref.id),
+                                        {
+                                                data: {
+                                                stripe_customer_id: stripeCustomer.id,
+                                                }
+                                        }
+                                        )
+                                )
+
+                                customerId = stripeCustomer.id
+                                }
+
+        Eu tbm devo pegar a variavel e passar o valor dela   customerId = stripeCustomer.id
+
+        Resumindo a variavel customerId pega o stripe_customer_id  que já existe no banco se if ele não existir 
+        eue cria um novo customer, deposi salva no banco e em seguida reatribui a variavel.
+
+        Para finalizar dentro de stripecheckoutSession na parte de customer eu devo substituir por customer: customerId 
+        
  
 */      
