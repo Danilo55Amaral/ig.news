@@ -949,5 +949,32 @@
 
         Para finalizar dentro de stripecheckoutSession na parte de customer eu devo substituir por customer: customerId 
         
- 
-*/      
+
+                                WEBHOOKS DO STRIPE 
+
+        Webhooks é um pattern utilizado para integração entre sistemas na web, geralmente apis externas utilizam para 
+        avisar que algo aconteceu por parte a api externa, ou  seja quando uma api terceira avisa a nossa aplicação que
+        algum evento aconteceu, geralmente esse aviso acontece atravéz de alguma rota http: passamos essa rota ao stripe 
+        por ex, e quando algum evento acontecer o stripe envia um aviso para essa rota. 
+
+        No caso da api que estamos utilizando o stripe ele tem isso configuravel dentro do site na nossa conta como padrão,
+        vai em settings -> checkout settings -> Configure webhooks.
+
+        Em seguida se a aplicação estiver online o próximo passo é colocar um Endpoint, como a aplicação ainda não foi 
+        publicada não adianta por que o stripe não vai usar localhost:3000 isso por que esse endereço não existe na web 
+        e não tem como o stripe enviar uma requisição a esse endereço. 
+
+        Como a aplicação ainda não está online vamos utilizar a CLI do stripe, vamos na opção de install cli e baixa e instala.
+        Após baixar o executavel , cola na raiz do projeto , depois abre o terminal e roda o comando stripe e depois stripe login 
+        vai abrir uma janela no Browser pedindo para permitir acesso.
+
+        Eu preciso criar a rota que irá receber essas informações do webhooks, dentro de pages dentro de api eu vou criar um arquivo 
+        chamado webhooks.ts. 
+
+        Vou rodar o comando stripe listen --forward-to localhost:3000/api/webhooks
+        isso faz com que todo evento que acontecer no stripe ele vai redirecionar para essa rota que foi criada
+        depois de rodar esse comando ele vai rodar e para testar eu vou na aplicação e vou finalizar uma comprar
+        como teste, e vou observar os eventos.
+
+
+*/  
