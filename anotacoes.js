@@ -977,4 +977,89 @@
         como teste, e vou observar os eventos.
 
 
+                                OUVINDO EVENTOS DO STRIPE
+
+        Vamos ouvir e interpretar os eventos vindos do stripe, e vamos pegar os dados de dentro deles , é necessário 
+        criar um código que transforme a requisição que o stripe faz em algo que seja legivel dentro do JavaScript
+        é um código bem especifico do node, esse código foi pego de dentro da integração do stripe com o node;
+        
+        Eu vou  importar de dentro do modo de stream do node o Readble dentro do meu arquivo webhooks
+                          import { Readable } from "stream";
+        Com isso eu vou ler essa requisição desse arquivo utilizando o Readble, em seguida eu crio uma função que 
+        converte essa Readble em uma string em um objeto em um requisição, essa função eu já peguei pronta apenas colei.
+                                async function buffer(readable: Readable) {
+                                        const chunks = [];
+
+                                        for await (const chunk of readable) {
+                                                chunks.push(
+                                                typeof chunk === "string" ? Buffer.from(chunk) : chunk
+                                                );
+                                        }
+
+                                        return Buffer.concat(chunks);
+                                        }
+
+        Em seguida eu converto minha função da requisição para uma async e passo o buffer passando a minha req.
+                                        const buf = await buffer(req)
+        
+        Nesse caso aqui a minha requisiçao está vindo como um Readable e para que funcione corretamente eu preciso 
+        desabilitar uma configuração padrão do next sobre o que ta vindo da requisição que o next tem como padrão.
+        Para isso eu utilizo o codigo abaixo:
+        export const config = {
+                api: {
+                        bodyParser: false
+                }
+        } 
+
+        Também eu vou colocar minha requisição dentro de um teste por que com isso se ela não for do tipo post ela nem 
+        será chamada: no else eu vou colocar igual coloquei no subscribe:
+        export default async (req: NextApiRequest, res: NextApiResponse) => {
+                if (req.method === 'POST') {
+                        const buf = await buffer(req)
+
+                        res.status(200).json({ ok: true })
+                } else {
+                        res.setHeader('Allow', 'POST')
+                        res.status(405).end('Method not allowed')
+                }
+        }
+
+        Quando eu executeo no terminal o modo de webhook do stripe ele mostra uma chave secreta que vamos precisar 
+        eu vou no en.local e vou criar uma nova variavel de ambiente para essa chave. chamei ela de STRIPE_WEBHOOK_SECRET
+        em seguida eu vou criar uma const chamada secret que vai buscar os meus headers: 
+                const secret = req.headers['stripe-signature']
+
+        Eu vou criar uma variavel let chamada event que ver receber um tipo Stripe e eu devo importar de dentro de 
+        stripe, vou setar com Event que são os eventos do webhook, em seguida eu vou utilizar um try e dentro eu 
+        vou atribuir o stripe que tbm devo importar da minha pasta services, a minha variavel event, vou setar 
+        com webhooks e com constructEvent passando alguns parametros. caso der erro eu retorno um catch passanso um 
+        status e uma message de error.
+
+        Após construido esse evento podemos ter acesso a varias informações desse evento. 
+
+        Vamos focar aqui no event.type ele retorna o checkout.session.completed   const { type } = event;
+
+        em seguida eu vou definir quais eventos são importantes para mim vou utilizar o new Set é como um array 
+        porém não contém nada duplicado dentro isso vai garantir que vai ser tratado apenas os eventos que queremos.
+        e vou  passar meu checkout.session.completed que é o unico evento que eu quero ouvir do Stripe.
+        const relevantEvents = new Set([
+            'checkout.session.completed'
+        ])
+
+        depois eu defino que se o nosso evento for readable ele vai exibir no console.
+         if (relevantEvents.has(type)) {
+            console.log('Evento recebido', event)
+        }
+
+        res.json({ received: true })
+
+
+                                        SALVANDO DADOS DO EVENTO 
+
+        
+
+        
+
+        
+
 */  
