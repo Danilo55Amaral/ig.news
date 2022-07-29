@@ -1056,7 +1056,27 @@
 
                                         SALVANDO DADOS DO EVENTO 
 
+        Eu criei uma pasta _lib dentro da pasta api e utilizaei _ por que quando é utilizado _ 
+        ele apenas cria uma pasta e não cria uma rota.
+        Dentro dessa pasta eu criei um arquivo chamado menageSubscription.ts esse arquivo exporta 
+        uma função chamada saveSubscription, essa função  pega as informações que recebe como parametro
+        e salva dentro do banco da dados.
+
+        Ela vai buscar o usuario no banco de dados do FaunaDB com o ID {customeID}. 
+
+        Para conseguir buscar um usuario pelo stripeCustomerId é necessário criar um indice dentro 
+        do FaunaDB, dentro indice, novo , vou definir o nome de user_by_stripe_customer_id , em termos
+        vou colocar data.stripe_customer_id e pate de Collection vou colocar users.
+        Feito isso é  possivel buscar os usuarios pelo id dentro do stripe.
+
+        Agora dentro do meu arquivo eu vou salvar os dados da subscription no FaunaDB.
+
+        Eu vou novamente no FaunaDB em New Collection eu crio com o nome de subscriptions.
+
+        Dentro do arquivo webhooks.ts eu crio um await e passo meu metodo saveSubscription que acabei de
+        criar.
         
+        Dentro de menageSubscription.ts eu manipulo esses dados.
 
         
 
