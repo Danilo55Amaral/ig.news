@@ -1078,6 +1078,20 @@
         
         Dentro de menageSubscription.ts eu manipulo esses dados.
 
+
+                                OUVINDO EVENTOS MAIS RECENTES
+
+        É necesspario ouvir outros eventos da parte de subscribe do usuario depois que ele concluir uma
+        comrpra, se a inscrição foi cancelada ou se o cartão não tem crédito, são 3 eventos que são 
+        necessarios serem verificados. 
+        customer.subscriptions.created,
+        customer.subscriptions.update,
+        customer.subscriptions.deleted,
+
+        Esses 3 eventos são da parte de inscrição do usuarios e devem ser verificados.
+        eu devo colcoar esses eventos também dentro do case no meu arquivo webhooks.ts;
+        
+
         
 
         
