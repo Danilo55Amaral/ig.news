@@ -1,0 +1,21 @@
+{
+  "id": "d2740cfd-32d1-48f4-870f-9a6e31a7a0ce",
+  "uid": "nostrum-optio-distinctio",
+  "type": "publication",
+  "data": {
+    "Title": [
+      {
+        "type": "paragraph",
+        "text": "Tempor eiusmod id ullamco mollit veniam commodo deserunt aliquip.",
+        "spans": []
+      }
+    ],
+    "Content": [
+      {
+        "type": "paragraph",
+        "text": "Sit esse commodo ad cillum esse ut magna do eiusmod. Nisi eu nulla adipisicing ipsum incididunt duis exercitation. Cillum adipisicing labore proident ea nisi nostrud qui proident id ex ut minim.",
+        "spans": []
+      }
+    ]
+  }
+}

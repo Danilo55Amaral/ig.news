@@ -1093,6 +1093,54 @@
         
 
         
+                        ESCOLHENDO UM CMS  
+
+                JAMStack 
+
+        JAMStack é um novo conceito onde podemos utilizar serviçoes sem depender de um back end para
+        isso, existem muitos servicos como o FaunaDB, Stripe , CMS , em muitos casos e aplicações 
+        não é necessário ter que desenvolver todo um back end para determinados serviços. 
+
+        JAMStack -> JavaScript (Funcionalidades) -> API(de terceiros) -> Markup  (html)    
+
+        O JAMStack consegue fazer aplicações inteiras sem ser necessária ter um back end todo configurado
+
+        PS- Isso não significa que um back end seja desnecessário mas que dependemos menos de back end.
+
+        CMS (Content Management System)
+        - São projetos que ja vem com painel de administração pronto que dá para criar conteudo dentro
+        exemplos Wordpress , Drupal, Joomla, Magento. 
+
+        Headless CMS é um CMS porém sem a parte visual para quem consome o conteudo, ele possue a parte 
+        visual apenas do painel de administração. 
+        Headless CMS é um painel de administração que todos os dados são servidos através de uma API
+
+        Alguns exemplos gratuitos  - Strapi(Qualquer conteudo) - Ghost(Blog) - Keystone (qualquer conteudo)
+
+        Alguns pagos - GraphCMS - PrismiC CMS - Contentful  - Shopify - Saleor  
+        
+        
+                                CONFIGURANDO PRISMAC CMS 
+
+        No site do Prismac CMS eu criei uma conta e depois criei um repositorio, para meu projeto, 
+        nesse repositorio eu escolho o plano, depois eu rodei os comandos que o prismac pede 
+        npx @slicemachine/init --repository ignews555555
+        npm run slicemachine
+
+        Após isso o repositorio do prismac vai rodar na porta localhost:9999
+
+        Para colocar as publicações criadas dentro do projeto basta ir em Settings --> API e Security
+        Respository security -> 
+
+        Também vou pegar a access master e criar uma variavel de ambiente para ela. Para poder acessar 
+        os posts da minha aplicação.
+        
+        
+        
+
+
+
+
 
         
 

@@ -1,0 +1,12 @@
+{
+  "_cts": {
+    "publication": {
+      "Title": {
+        "config": {
+          "patternType": "PARAGRAPH",
+          "blocks": 1
+        }
+      }
+    }
+  }
+}
