@@ -1134,7 +1134,14 @@
 
         Também vou pegar a access master e criar uma variavel de ambiente para ela. Para poder acessar 
         os posts da minha aplicação.
+
+                                PÁGINA: POSTS 
+
         
+        Eu criei dentro de pages uma pasta posts e dentro criei um arquivo index e style, criei dessa forma 
+        para separar tbm meu style da minha página e também por que dentro dessa pasta vou ter mais arquivos de posts.
+
+
         
         
 
