@@ -1142,8 +1142,24 @@
         para separar tbm meu style da minha página e também por que dentro dessa pasta vou ter mais arquivos de posts.
 
 
+                                CONSUMINDO A API DO PRISMAC
+
+        Existem algumas formas de consumir essa api , Rest que é a mais comum , também tem em GraphQl, e também já tem 
+        uma integração com varias tecnologias, eu posso excolher a tecnologia e na propria documentação ver como utilizar
+        para consumir.
         
-        
+        PS- A pasta service é onde eu coloco arquivos que vão fazer alguma integração com algum serviço externo.
+
+        Dentro da pasta services eu  criei um arquivo chamado prismic.ts onde eu faço essa integração 
+        com a api.
+
+        Eu devo rodar o comando           npm add @prismicio/client
+        ele instala o client do prismic para integrar com JavaScript
+
+        Em seguida eu criei dentro da pasta services um arquivo chamado prismic.ts e escrevi o código para fazer a 
+        integtração com a api.
+
+        PS - Podemos fazer essa integração de varias formas  consultando a documentação
 
 
 
