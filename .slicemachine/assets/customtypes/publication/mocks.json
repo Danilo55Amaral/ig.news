@@ -1,19 +1,19 @@
 {
-  "id": "d2740cfd-32d1-48f4-870f-9a6e31a7a0ce",
-  "uid": "nostrum-optio-distinctio",
+  "id": "aa704836-824e-483b-916f-ced4bd5228ca",
+  "uid": "fuga-unde-repellendus",
   "type": "publication",
   "data": {
-    "Title": [
+    "title": [
       {
         "type": "paragraph",
-        "text": "Tempor eiusmod id ullamco mollit veniam commodo deserunt aliquip.",
+        "text": "Lorem labore do Lorem aliquip cupidatat elit consectetur et quis Lorem et tempor enim velit.",
         "spans": []
       }
     ],
-    "Content": [
+    "content": [
       {
-        "type": "paragraph",
-        "text": "Sit esse commodo ad cillum esse ut magna do eiusmod. Nisi eu nulla adipisicing ipsum incididunt duis exercitation. Cillum adipisicing labore proident ea nisi nostrud qui proident id ex ut minim.",
+        "type": "heading1",
+        "text": "Cultivate magnetic e-commerce",
         "spans": []
       }
     ]

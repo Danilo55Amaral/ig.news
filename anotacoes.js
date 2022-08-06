@@ -1162,6 +1162,54 @@
         PS - Podemos fazer essa integração de varias formas  consultando a documentação
 
 
+                                LISTANDO POSTS EM TELA  
+                                
+        Uma as coisas importantes quando se comsome uma API externa é que muitas vezes os 
+        dados não vem no formato em que estamos acostumados, datas , valores, existem varias 
+        formas de formatar data por ex. mas aqui utilizei uma forma em que formatei a data 
+        onde faço a chamada API. 
+
+        É importamte fazer dessa forma a formatação dos dados logo após o comsumo da API 
+        desses dados, isso vai garantir mais processamento por que dessa forma não é necessário 
+        formatar os valores sempre em tempo de execução.
+
+        Existe uma lib do proprio Prismic que converte os formatos do prismic eu rodo o comando 
+        npm add prismic-dom   e tbm npm add @types/prismic-dom-D
+
+        E utilizei o RichText    import { RichText } from "prismic-dom";   é um conversor 
+        do prismic para texto e html.
+
+
+                        NAVEGAÇÃO NO MENU  
+
+        Propriedade prefetch da tag Link 
+        Essa propriedadade quando utilizada ele deixa a página pré-carregada deixando a velocidade 
+        de carregamento da página bem mais rapida.
+        
+        A tag link deixa o carregamento da página bem mais rapido e quando utilizada a propriedade 
+        prefetch ele deixa ainda mais rapido.
+
+        Geralemtne é utilizado em links em que o usuario mais acessa.
+
+                        COMPONENTE ACTIVElINK
+
+        Eu vou utilizar uma propriedade do next chamada useRouter e para isso eu devo importar 
+        import { useRouter } from "next/router"; essa propriedade permite utilizar o asPath. 
+
+        Após isso eu crio um componente chamado ActiveLink não precisa de arquivo css por que 
+        é um link dop next que podemos ativar essa classe.
+
+        Dentro desse arquivo eu faço uma implementação desse ActiveLink passando para meus Links.
+
+        PS- Nesse componente utilizamos recursos avancados do React como  o CloneElement.
+
+
+
+        
+
+
+
+
 
 
 
